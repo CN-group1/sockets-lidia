@@ -1,0 +1,29 @@
+import socket
+
+HOST = '100.122.92.96'  
+PORT = 5005
+
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+    
+    server_socket.bind((HOST, PORT))
+    
+    server_socket.listen()
+    print(f"The server is running on {HOST}, port {PORT}...")
+    
+    while True:
+
+        client_socket, client_address = server_socket.accept()
+        
+        with client_socket:
+            print(f"\n--- Connection established successfully from: {client_address} ---")
+            
+            while True:
+                data = client_socket.recv(1024)
+                
+                if not data:
+                    print(f"--- Client {client_address} disconnected ---")
+                    break
+                    
+                text_message = data.decode('utf-8')
+                print(f"Message received from client {client_address}: {text_message}")
